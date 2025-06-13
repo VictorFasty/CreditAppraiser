@@ -27,17 +27,19 @@ public class CreditController {
 
 
     @GetMapping(value = "situation-client", params = "cpf")
-    public ResponseEntity FindPerClientSituation(@RequestParam("cpf") String cpf) {
+    public ResponseEntity<?> findPerClientSituation(@RequestParam("cpf") String cpf) {
         try {
             ClientSituation clientSituation = appraiserCreditService.FindClientSituation(cpf);
             return ResponseEntity.ok(clientSituation);
         } catch (ClientDataNotFoundException e) {
             e.printStackTrace();
-            ;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
         } catch (CommunicationErrorException e) {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
     }
+
+
 
 
 }
