@@ -1,6 +1,8 @@
 package io.github.victorfasty.msCreditAppraiser.application;
 
+import io.github.victorfasty.msCreditAppraiser.domain.model.AvaliationData;
 import io.github.victorfasty.msCreditAppraiser.domain.model.ClientSituation;
+import io.github.victorfasty.msCreditAppraiser.domain.model.ReturnAvaliationClient;
 import io.github.victorfasty.msCreditAppraiser.ex.ClientDataNotFoundException;
 import io.github.victorfasty.msCreditAppraiser.ex.CommunicationErrorException;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("credit")
@@ -38,7 +37,21 @@ public class CreditController {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
     }
-s
+
+
+    @PostMapping
+    public ResponseEntity Avaliation(@RequestBody AvaliationData avaliationData){
+        try {
+            ReturnAvaliationClient avaliation = appraiserCreditService.Avaliation(avaliationData.getCpf(), avaliationData.getRenda());
+            ResponseEntity.ok(avaliation);
+        } catch (ClientDataNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
+        } catch (CommunicationErrorException e) {
+            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
+
+    }
 
 
 
