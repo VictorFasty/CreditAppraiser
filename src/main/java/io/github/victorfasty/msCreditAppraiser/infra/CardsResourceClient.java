@@ -19,6 +19,6 @@ public interface CardsResourceClient {
 
 
     @GetMapping(params = "income")
-    public ResponseEntity<List<Card>> getCardsIncomeLimit(@RequestParam("income") Long income)
+    public ResponseEntity<List<Card>> getCardsIncomeLimit(@RequestParam("income") Long income);
 
 }

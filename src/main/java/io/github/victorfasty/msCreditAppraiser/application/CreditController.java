@@ -40,18 +40,21 @@ public class CreditController {
 
 
     @PostMapping
-    public ResponseEntity Avaliation(@RequestBody AvaliationData avaliationData){
+    public ResponseEntity<?> Avaliation(@RequestBody AvaliationData avaliationData) {
         try {
-            ReturnAvaliationClient avaliation = appraiserCreditService.Avaliation(avaliationData.getCpf(), avaliationData.getRenda());
-            ResponseEntity.ok(avaliation);
+            ReturnAvaliationClient avaliation = appraiserCreditService.Avaliation(
+                    avaliationData.getCpf(),
+                    avaliationData.getRenda()
+            );
+            return ResponseEntity.ok(avaliation); // ← agora está retornando corretamente
         } catch (ClientDataNotFoundException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
         } catch (CommunicationErrorException e) {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
-
     }
+
 
 
 
